@@ -52,12 +52,11 @@ def olx_url_main(url):
         if not filtered_out:
 
             url_detailed = single.find('a')['href']
+            soup_detailed = Utils.request(url_detailed)
 
             # extract detailed info for otodom.pl ad   
-            match_oto = re.search("^https?:\/\/www.otodom.pl\/", \
-                                  url_detailed)
+            match_oto = re.search(Constants.oto_url_pattern, url_detailed)
             if match_oto:
-                soup_detailed = Utils.request(url_detailed)
                 div = soup_detailed.find("div", "text-details")
                 left = div.find("div", "left")
                 soup_id = left.find("p").text.strip()
@@ -71,26 +70,24 @@ def olx_url_main(url):
                     
                     # check if ad is not older than 14 days; if so, it will be skipped
                     if Utils.rex(":[ a-z0-9.]+", added)[2:] != "ponad 14 dni temu":
-                        gen = general_ad_info(url_detailed, title, single)
+                        gen = Utils.general_ad_info(url_detailed, title, single)
                         details = Oto.oto_detailed(gen['URL'])
                         details['ID'] = id
 
                         
-            # extract detailed info for olx.pl ad                                          
-            match_olx = re.search("^https?:\/\/www.olx.pl\/", \
-                                  url_detailed)
+            # extract detailed info for olx.pl ad
+            match_olx = re.search(Constants.olx_url_pattern, url_detailed)
             if match_olx:     
-                soup_detailed = Utils.request(url_detailed)
                 em = soup_detailed.find("em")
                 id = Utils.rex("[0-9]+", em.find("small").text)
                 
                 # check if ad's id is not in db
                 if id not in ids:
-                    gen = general_ad_info(url_detailed, title, single)
+                    gen = Utils.general_ad_info(url_detailed, title, single)
                     details = Olx.olx_detailed(gen['URL'])
                     details['ID'] = id
                     
-            #time.sleep(1)
+            time.sleep(1)
             ad = {**gen, **details}
             if ad: 
                 c.execute(Constants.db_insert_into_ads, (ad['TITLE'], \
@@ -115,8 +112,9 @@ def olx_url_main(url):
                        ad['ID'], \
                       ))                
                 results.append(ad)
+        
         else:
             pass
-
+    
     return results
                          

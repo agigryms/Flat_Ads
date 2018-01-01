@@ -1,5 +1,27 @@
-import time, requests, re
+import os, time, requests, re
 from bs4 import BeautifulSoup
+
+
+def list_dicts_to_string(ads_list):
+    all_adds = []
+    for ad in ads_list:
+        ad_items = []
+        for key, value in ad.items():
+            string = '{}: {}'.format(key, value)
+            ad_items.append(string)
+        all_adds.append(ad_items)
+        all_adds.append(['*********'])
+
+    return all_adds
+
+
+def send_email(text):
+    return requests.post(os.environ['MAILGUN_API_BASE_URL'], \
+                         auth=("api", os.environ['MAILGUN_API_KEY']), \
+                         data={"from": os.environ['MAILGUN_FROM'], \
+                               "to": [os.environ['ALERT_RECIPIENT']], \
+                               "subject": "New ads for you, darling.", \
+                               "text": text})
 
 
 def from_epoch(t0):
