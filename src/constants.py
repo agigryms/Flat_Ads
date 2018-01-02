@@ -6,7 +6,10 @@ oto_url_pattern = "^https?:\/\/www.otodom.pl\/"
 olx_url_pattern = "^https?:\/\/www.olx.pl\/"
 
 
-patterns = [".*bezpo.*", ".*bia.o.*", ".*weso.*", ".*rembert.*", ".*prag.*", ".*bem.*", ".*pradz.*", ".*targ.w.*", ".*kochanowski.*", ".*sask.*", ".*kabat.*"]
+patterns_title = [".*na biuro.*", ".*bezpo.*", ".*bez prowizji.*", ".*wilan.w.*", ".*lux.*", ".*ekskluzywn.*", ".*luksus.*", ".*tarchomin.*", ".*bia.o.*", ".*weso.*", ".*rembert.*", ".*prag.*", ".*bem.*", ".*pradz.*", ".*targ.w.*", ".*kochanowski.*", ".*sask.*", ".*kabat.*"]
+
+
+patterns_desc = [".*bezpo.redni.*", ".*bez agencji.*", ".*po.rednikom dzi.kuj.*", ".*agencjom dzi.kuj.*", ".*nie wsp..pracuj. z agencj.*", ".*nie wsp..pracuj. z po.rednik.*"]
 
 
 db_ads = "/home/agigryms/Notebooks/Flat_Ads/Flat_Ads/ads.db"
@@ -61,4 +64,4 @@ db_insert_into_ads = """INSERT INTO ads (
     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);
     """
 
-db_ids = "SELECT ID FROM ads GROUP BY ID"
+db_ids = "SELECT ID FROM ads"

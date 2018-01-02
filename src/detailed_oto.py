@@ -77,7 +77,7 @@ def oto_detailed(url):
 
     details['CONTACT'] = soup.find("span", "phone-number").text.strip()
 
-    details['DESCRIPTION'] = soup.find("div", "text-contents").find("div", {"itemprop":"description"}).text.strip()
+    #details['DESCRIPTION'] = soup.find("div", "text-contents").find("div", {"itemprop":"description"}).text.strip()
     details['META_DESCRIPTION'] = soup.find("meta", {"name":"description"})["content"]
     
     return details

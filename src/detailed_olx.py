@@ -42,7 +42,7 @@ def olx_detailed(url):
 
 
     content = soup.find("div", {"id":"textContent"})
-    details['DESCRIPTION'] = content.text.strip()
+    #details['DESCRIPTION'] = content.text.strip()
     details['META_DESCRIPTION'] = soup\
 			 .find("meta", {"name":"description"})["content"]
    

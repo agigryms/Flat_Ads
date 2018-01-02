@@ -25,10 +25,12 @@ def olx_url_main(url):
         ids.append(id['ID'])
 
     # get keywords for filters
-    patterns = Constants.patterns
-    
+    patterns_title = Constants.patterns_title
+    patterns_desc = Constants.patterns_desc
+ 
     # start scraping
     soup = Utils.request(url)
+    time.sleep(5)
     ads = soup.find("table", {'id':"offers_table"})
 
     singles = ads.find_all("tr",  "wrap")
@@ -37,19 +39,21 @@ def olx_url_main(url):
     # single is one ad from main url's list of ads 
     for single in singles:
         title = single.find('h3').text.strip()
-        filtered_out = False
+        filtered_out_title = False
+        filtered_out_desc = False
 
         # gen is information scraped for single from main url
         # details is information from single's detailed url
         gen = {}
         details = {}
         
-        for pattern in patterns:
+        # check if title contains no-go keywords
+        for pattern in patterns_title:
             if re.search(pattern, title.lower()):
-                filtered_out = True
+                filtered_out_title = True
                 break
                 
-        if not filtered_out:
+        if not filtered_out_title:
 
             url_detailed = single.find('a')['href']
             soup_detailed = Utils.request(url_detailed)
@@ -59,22 +63,35 @@ def olx_url_main(url):
             if match_oto:
                 div = soup_detailed.find("div", "text-details")
                 left = div.find("div", "left")
-                soup_id = left.find("p").text.strip()
-                id = Utils.rex("Otodom:[ 0-9]+", soup_id).split(': ')[1]
+                id_soup = left.find("p").text.strip()
+                id = Utils.rex("Otodom:[ 0-9]+", id_soup).split(': ')[1]
 
                 # check if ad's id is not in db
-                if id not in ids:
-                    div = soup_detailed.find("div", "text-details")
-                    dates = div.find("div", "right").find_all("p")
-                    added = dates[0].text
+                if id in ids:
+                    break
+                else:
+                    # check if detailed description contains no-go keywords 
+                    desc = soup_detailed.find("div", "text-contents")\
+                               .find("div", {"itemprop":"description"})\
+                               .text.strip()
+                    for pattern in patterns_desc:
+                        if re.search(pattern, desc.lower()):
+                            filtered_out_desc = True  
+                            break
                     
-                    # check if ad is not older than 14 days; if so, it will be skipped
-                    if Utils.rex(":[ a-z0-9.]+", added)[2:] != "ponad 14 dni temu":
-                        gen = Utils.general_ad_info(url_detailed, title, single)
-                        details = Oto.oto_detailed(gen['URL'])
-                        details['ID'] = id
-
+                    if not filtered_out_desc:
+                        div = soup_detailed.find("div", "text-details")
+                        dates = div.find("div", "right").find_all("p")
+                        added = dates[0].text
+                    
+                        # check if ad is not older than 14 days; if so, it will be skipped
+                        if Utils.rex(":[ a-z0-9.]+", added)[2:] != "ponad 14 dni temu":
+                            gen = Utils.general_ad_info(url_detailed, title, single)
+                            details = Oto.oto_detailed(gen['URL'])
+                            details['DESCRIPTION'] = desc
+                            details['ID'] = id
                         
+
             # extract detailed info for olx.pl ad
             match_olx = re.search(Constants.olx_url_pattern, url_detailed)
             if match_olx:     
@@ -82,12 +99,23 @@ def olx_url_main(url):
                 id = Utils.rex("[0-9]+", em.find("small").text)
                 
                 # check if ad's id is not in db
-                if id not in ids:
-                    gen = Utils.general_ad_info(url_detailed, title, single)
-                    details = Olx.olx_detailed(gen['URL'])
-                    details['ID'] = id
+                if id in ids:
+                    break
+                else:
+                    content = soup_detailed.find("div", {"id":"textContent"})
+                    desc = content.text.strip()
+                    for pattern in patterns_desc:
+                        if re.search(pattern, desc.lower()):
+                            filtered_out_desc = True
+                            break
+
+                    if not filtered_out_desc:                    
+                        gen = Utils.general_ad_info(url_detailed, title, single)
+                        details = Olx.olx_detailed(gen['URL'])
+                        details['DESCRIPTION'] = desc
+                        details['ID'] = id
                     
-            time.sleep(1)
+            time.sleep(2)
             ad = {**gen, **details}
             if ad: 
                 c.execute(Constants.db_insert_into_ads, (ad['TITLE'], \
@@ -113,8 +141,6 @@ def olx_url_main(url):
                       ))                
                 results.append(ad)
         
-        else:
-            pass
     
     return results
                          

@@ -15,17 +15,18 @@ def list_dicts_to_string(ads_list):
     return all_adds
 
 
-def send_email(text):
+def send_email(text, num, timestamp):
     return requests.post(os.environ['MAILGUN_API_BASE_URL'], \
                          auth=("api", os.environ['MAILGUN_API_KEY']), \
                          data={"from": os.environ['MAILGUN_FROM'], \
                                "to": [os.environ['ALERT_RECIPIENT']], \
-                               "subject": "New ads for you, darling.", \
+                               "subject": "@ {} - New {}, darling!"\
+                                          .format(timestamp, num), \
                                "text": text})
 
 
 def from_epoch(t0):
-    return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(t0))
+    return time.strftime('%Y-%m-%d %H:%M', time.localtime(t0))
 
 
 def request(url): 
