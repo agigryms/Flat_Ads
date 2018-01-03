@@ -68,7 +68,8 @@ def olx_url_main(url):
 
                 # check if ad's id is not in db
                 if id in ids:
-                    break
+                    #break
+                    pass
                 else:
                     # check if detailed description contains no-go keywords 
                     desc = soup_detailed.find("div", "text-contents")\
@@ -100,7 +101,8 @@ def olx_url_main(url):
                 
                 # check if ad's id is not in db
                 if id in ids:
-                    break
+                    #break
+                    pass
                 else:
                     content = soup_detailed.find("div", {"id":"textContent"})
                     desc = content.text.strip()

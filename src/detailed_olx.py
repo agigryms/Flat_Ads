@@ -20,7 +20,7 @@ def olx_detailed(url):
     details['POWIERZCHNIA'] = None
     details['CZYNSZ_DODATKOWO'] = None
     details['POZIOM'] = None
-
+    details['CONTACT'] = None
 
     em = soup.find("em")
     # details['ID'] is filled in by main script
@@ -42,18 +42,8 @@ def olx_detailed(url):
 
 
     content = soup.find("div", {"id":"textContent"})
-    #details['DESCRIPTION'] = content.text.strip()
     details['META_DESCRIPTION'] = soup\
 			 .find("meta", {"name":"description"})["content"]
-   
  
-    contact = soup.find("ul", {"id":"contact_methods"}).find_all("li")
-    methods = []
-    for method in contact:
-        methods.append(method.find("i")['data-icon'])
-        if method.find("i")["data-icon"] == "phone":
-            methods.append(method.find("strong").text)
-    details['CONTACT'] = ','.join(methods)
-
         
     return details

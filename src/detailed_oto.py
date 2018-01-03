@@ -52,6 +52,7 @@ def oto_detailed(url):
     details['UMEBLOWANE'] = None
     details['DATES_AVAILABLE_FROM'] = None
     details['OFERTA_OD'] = None
+    details['CONTACT'] = None
 
     if params.find("ul", "sub-list"):
         sub = params.find("ul", "sub-list")
@@ -75,9 +76,7 @@ def oto_detailed(url):
     if contact.find("h6"):
         details['OFERTA_OD'] = contact.find("h6").text
 
-    details['CONTACT'] = soup.find("span", "phone-number").text.strip()
 
-    #details['DESCRIPTION'] = soup.find("div", "text-contents").find("div", {"itemprop":"description"}).text.strip()
     details['META_DESCRIPTION'] = soup.find("meta", {"name":"description"})["content"]
     
     return details

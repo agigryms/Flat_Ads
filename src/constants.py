@@ -1,4 +1,6 @@
-url_main = "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/warszawa/?search%5Bfilter_float_m%3Afrom%5D=50"
+#url_main = "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/warszawa/?search%5Bfilter_float_m%3Afrom%5D=50"
+url_main = "https://www.olx.pl/nieruchomosci/mieszkania/wynajem/warszawa/?search%5Bfilter_float_price%3Ato%5D=2000&search%5Bfilter_float_m%3Afrom%5D=50&search%5Bfilter_enum_rooms%5D%5B0%5D=three"
+
 
 oto_url_pattern = "^https?:\/\/www.otodom.pl\/" 
 
@@ -6,10 +8,11 @@ oto_url_pattern = "^https?:\/\/www.otodom.pl\/"
 olx_url_pattern = "^https?:\/\/www.olx.pl\/"
 
 
-patterns_title = [".*na biuro.*", ".*bezpo.*", ".*bez prowizji.*", ".*wilan.w.*", ".*lux.*", ".*ekskluzywn.*", ".*luksus.*", ".*tarchomin.*", ".*bia.o.*", ".*weso.*", ".*rembert.*", ".*prag.*", ".*bem.*", ".*pradz.*", ".*targ.w.*", ".*kochanowski.*", ".*sask.*", ".*kabat.*"]
+#patterns_title = [".*dla rodziny.*", ".*bez po.srednik.*", ".*||.*", ".*tel ||.*", ".*na biuro.*", ".*bezpo.*", ".*bez prowizji.*", ".*wilan.w.*", ".*lux.*", ".*ekskluzywn.*", ".*luksus.*", ".*tarchomin.*", ".*bia.o.*", ".*weso.*", ".*rembert.*", ".*prag.*", ".*pradz.*", ".*targ.w.*", ".*kochanowski.*", ".*sask.*", ".*kabat.*"]
+patterns_title = [".*dla rodziny.*", ".*bez po.srednik.*", ".*||.*", ".*tel ||.*", ".*na biuro.*", ".*bezpo.*", ".*bez prowizji.*"]
 
 
-patterns_desc = [".*bezpo.redni.*", ".*bez agencji.*", ".*po.rednikom dzi.kuj.*", ".*agencjom dzi.kuj.*", ".*nie wsp..pracuj. z agencj.*", ".*nie wsp..pracuj. z po.rednik.*"]
+patterns_desc = [".*bezpo.redni.*", ".*bez prowizji.*", ".*luksusow.*", ".*bez agencji.*", ".*niniejsze og.oszenie jest wy..cznie informacj. handlow.*", ".*po.rednikom dzi.kuj.*", ".*agencjom dzi.kuj.*", ".*nie wsp..pracuj. z agencj.*", ".*nie wsp..pracuj. z po.rednik.*"]
 
 
 db_ads = "/home/agigryms/Notebooks/Flat_Ads/Flat_Ads/ads.db"
